@@ -1,0 +1,16 @@
+ftp:
+  image: ftp
+  ports:
+    - "20:20" # ftp-data
+    - "21:21" # ftp-control
+  environment:
+    - FTP_USER=aditoadmin
+    - FTP_PASS=aditopass
+    - PASV_IP=192.168.42.45
+    - PPORT_MIN=30023
+    - PPORT_MAX=30025
+  volumes:
+    - /etc/localtime:/etc/localtime:ro
+    - /etc/timezone:/etc/timezone:ro
+    - /a/data/buildftp.intern:/a/data
+  restart: unless-stopped

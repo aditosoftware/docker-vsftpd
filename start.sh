@@ -13,16 +13,30 @@ ln -sf /a/data "/home/${FTP_USER}"
 useradd --shell /bin/sh "${FTP_USER}"
 echo "${FTP_USER}:${FTP_PASS}" | chpasswd
 
-sed -i 's#listen=NO#listen=YES#g' /etc/vsftpd.conf
-sed -i 's#listen_ipv6=YES#listen_ipv6=NO#g' /etc/vsftpd.conf
-sed -i 's#anonymous_enable=NO#anonymous_enable=YES#g' /etc/vsftpd.conf
-sed -i 's&#write_enable=YES&write_enable=YES&g' /etc/vsftpd.conf
+cat > /etc/vsftpd.conf << EOF
 
-echo "pasv_min_port=12020" >> /etc/vsftpd.conf
-echo "pasv_max_port=12025" >> /etc/vsftpd.conf
-echo "anon_root=/a/data" >> /etc/vsftpd.conf
-echo "allow_writeable_chroot=YES" >> /etc/vsftpd.conf
-echo "local_umask=022" >> /etc/vsftpd.conf
+listen=YES
+listen_ipv6=NO
+anonymous_enable=YES
+local_enable=YES
+write_enable=YES
+dirmessage_enable=YES
+use_localtime=YES
+xferlog_enable=YES
+connect_from_port_20=YES
+secure_chroot_dir=/var/run/vsftpd/empty
+pam_service_name=vsftpd
+rsa_cert_file=/etc/ssl/certs/ssl-cert-snakeoil.pem
+rsa_private_key_file=/etc/ssl/private/ssl-cert-snakeoil.key
+ssl_enable=NO
+pasv_address=$PASV_IP
+pasv_min_port=$PPORT_MIN
+pasv_max_port=$PPORT_MAX
+anon_root=/a/data
+allow_writeable_chroot=YES
+local_umask=022
+
+EOF
 
 chown "${FTP_USER}" /a/data
 
