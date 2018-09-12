@@ -18,6 +18,7 @@ cat > /etc/vsftpd.conf << EOF
 listen=YES
 listen_ipv6=NO
 anonymous_enable=YES
+pasv_addr_resolve=NO
 local_enable=YES
 write_enable=YES
 dirmessage_enable=YES
@@ -29,12 +30,17 @@ pam_service_name=vsftpd
 rsa_cert_file=/etc/ssl/certs/ssl-cert-snakeoil.pem
 rsa_private_key_file=/etc/ssl/private/ssl-cert-snakeoil.key
 ssl_enable=NO
+pasv_addr_resolve=NO
+pasv_enable=YES
 pasv_address=$PASV_IP
 pasv_min_port=$PPORT_MIN
 pasv_max_port=$PPORT_MAX
 anon_root=/a/data
 allow_writeable_chroot=YES
 local_umask=022
+port_enable=YES
+connect_from_port_20=YES
+ftp_data_port=20
 
 EOF
 
